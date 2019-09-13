@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  portainer:
+    container_name: portainer
+    restart: always
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - data:/data
+    networks:
+      - proxy_network
+    labels:
+      - traefik.port=9000
+      - traefik.backend=portainer_backend
+      - traefik.frontend.rule=Host:portainer.lab.goldmont
+      - traefik.docker.network=proxy_network
+
+volumes:
+  data:
+
+networks:
+  proxy_network:
+    external: true
